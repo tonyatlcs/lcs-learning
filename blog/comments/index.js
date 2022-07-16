@@ -1,20 +1,32 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const commentsByPostId = {};
 
 // A GET request for retrieving comments
 // Retrieves all comments associated with the given comment Id.
+
+/**
+ * req (request object): GET request to server to get a comment associated to a Post ID
+ * res (result object): Server sends back the requested comment by Post ID.
+ */
 app.get("/posts/:id/comments", (req, res) => {
   res.send(commentsByPostId[req.params.id] || []);
 });
 
 // A POST request for making comments
 // This creates a comment associated with the given post Id
+
+/**
+ * req (request object): POST request to send a comment from front-end to the server
+ * res (result object): sends the user generated comment to the server.
+ */
 app.post("/posts/:id/comments", (req, res) => {
   const commentId = randomBytes(4).toString("hex");
   const { content } = req.body;
