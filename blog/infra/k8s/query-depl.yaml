@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  # Take a look at all the created Pods and find the Pod that has a label of "app: posts"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query
+  # Specify the exact configuration of a Pod that we want the deployment to make 
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers: 
+        - name: query
+          image: tonyatlcs/query
+# Config for ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  selector:
+    app: query
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002
+      targetPort: 4002
